@@ -1,0 +1,21 @@
+---
+- name: Play Book to install all required tools
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: Install git
+      ansible.builtin.yum:
+        name: git
+        state: present
+    - name: check if GIT is installed
+      shell: rpm -qa | grep git
+      register: git_installed
+      ignore_errors: True
+      check_mode: False
+      changed_when: False
+
+    - name: print
+      debug:
+        msg: "Git is installed"
+      when: git_installed.rc == 0
